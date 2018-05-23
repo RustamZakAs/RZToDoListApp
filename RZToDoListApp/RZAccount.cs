@@ -215,9 +215,7 @@ namespace RZToDoListApp
                         Console.WriteLine("                                  ");
                         Console.SetCursorPosition(12, 7);
                     }
-
-
-                    //                    Console.WriteLine(oldInfo[u_ind].rz_password);
+                    //Console.WriteLine(oldInfo[u_ind].rz_password);
                 }
                 if (cki.Key == ConsoleKey.F1)
                 {
