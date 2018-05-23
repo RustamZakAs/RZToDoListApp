@@ -49,24 +49,11 @@ namespace RZToDoListApp
             } while (i < text.Length);
         }
 
-        public static void RZSignUp(ref RZAccount[] oldInfo, int userCount)
+        public static void RZSignUp(ref List<RZAccount> oldInfo)
         {
             Console.SetWindowSize(35, 19);
             Console.SetBufferSize(35, 19);
-            var info = new RZAccount[userCount];
-            if (userCount > 1)
-            {
-                for (int i = 0; i < oldInfo.Length; i++)
-                {
-                    info[i].rz_name = oldInfo[i].rz_name;
-                    info[i].rz_surname = oldInfo[i].rz_surname;
-                    info[i].rz_age = oldInfo[i].rz_age;
-                    info[i].rz_login = oldInfo[i].rz_login;
-                    info[i].rz_password = oldInfo[i].rz_password;
-                }
-            }
-
-            userCount -= 1;
+            RZAccount info = new RZAccount();
             do
             {
                 Console.WriteLine(userCount);
@@ -74,59 +61,61 @@ namespace RZToDoListApp
                 {
                     Console.SetCursorPosition(2, 6);
                     Console.Write("Name:    ");
-                    info[userCount].rz_name = Console.ReadLine();
-                } while (info[userCount].rz_name.Length == 0);
+                    info.RZName = Console.ReadLine();
+                } while (info.RZName.Length == 0);
                 do
                 {
                     Console.SetCursorPosition(2, 7);
                     Console.Write("Surname: ");
-                    info[userCount].rz_surname = Console.ReadLine();
-                } while (info[userCount].rz_surname.Length == 0);
+                    info.RZSurname = Console.ReadLine();
+                } while (info.RZSurname.Length == 0);
                 do
                 {
                     Console.SetCursorPosition(2, 8);
                     Console.Write("Age:     ");
-                    int.TryParse(Console.ReadLine(), out info[userCount].rz_age);
-                } while (info[userCount].rz_age == 0);
+//                    info.RZAge = int.TryParse(Console.ReadLine(), out info.RZAge);
+                } while (info.RZAge == 0);
 
-                Console.WriteLine($"Name:    {info[userCount].rz_name}");
-                Console.WriteLine($"Surname: {info[userCount].rz_surname}");
-                Console.WriteLine($"Age:     {info[userCount].rz_age}");
+                Console.WriteLine($"Name:    {info.RZName}");
+                Console.WriteLine($"Surname: {info.RZSurname}");
+                Console.WriteLine($"Age:     {info.RZAge}");
                 Console.WriteLine();
 
-                if (info[userCount].rz_name.Length > 0)
+                if (info.RZName.Length > 0)
                 {
-                    info[userCount].rz_login = info[userCount].rz_name.ToUpper();
-                    info[userCount].rz_login += "_";
+                    info.RZLogin = info.RZName.ToUpper();
+                    info.RZLogin += "_";
                 }
-                if (info[userCount].rz_surname.Length > 0)
+                if (info.RZSurname.Length > 0)
                 {
-                    string temp_name = info[userCount].rz_surname.ToLower();
-                    info[userCount].rz_login += temp_name[0];
-                    if (info[userCount].rz_surname.Length > 1)
-                        info[userCount].rz_login += temp_name[1];
+                    string temp_name = info.RZSurname.ToLower();
+                    info.RZLogin += temp_name[0];
+                    if (info.RZSurname.Length > 1)
+                        info.RZLogin += temp_name[1];
                 }
-                if (info[userCount].rz_age > 0)
+                if (info.RZAge > 0)
                 {
-                    if (info[userCount].rz_surname.Length > 0)
-                        info[userCount].rz_login += "_";
-                    info[userCount].rz_login += info[userCount].rz_age.ToString();
+                    if (info.RZSurname.Length > 0)
+                        info.RZLogin += "_";
+                    info.RZLogin += info.RZAge.ToString();
                 }
 
-                info[userCount].rz_password = RandomString(password_len);
+//                info.RZPassword = RandomString(password_len);
+                info.RZPassword = Console.ReadLine();
 
-                Console.WriteLine($"User Login:    {info[userCount].rz_login}");
-                Console.WriteLine($"User Password: {info[userCount].rz_password}");
+
+                Console.WriteLine($"User Login:    {info.RZLogin}");
+                Console.WriteLine($"User Password: {info.RZPassword}");
 
                 Console.ReadKey();
 
-            } while (info[userCount].rz_login.Length == 0);
-            RZWriteBin(ref info);
-            oldInfo = info;
+            } while (info.RZLogin.Length == 0);
+            //            RZWriteBin(ref info);
+            oldInfo.Add(info);
         }
-        public static void RZLogIn(ref RZPersonalInfo[] oldInfo)
+        public static void RZLogIn(ref List<RZAccount> oldInfo)
         {
-            if (oldInfo.Length == 0)
+            if (oldInfo.Count == 0)
             {
                 Console.WriteLine("Users is not exist!");
                 Console.ReadKey();
@@ -140,7 +129,7 @@ namespace RZToDoListApp
             Console.SetCursorPosition(1, 6);
             Console.WriteLine("Press Up or Down Key");
             Console.SetCursorPosition(1, 7);
-            Console.Write($"User Name: {oldInfo[u_ind].rz_login}");
+            Console.Write($"User Name: {oldInfo[u_ind].RZLogin}");
             do
             {
                 Console.SetCursorPosition(12, 7);
@@ -149,29 +138,30 @@ namespace RZToDoListApp
                 int login_len = 0;
                 foreach (var item in oldInfo)
                 {
-                    if (login_len < item.rz_login.Length)
-                        login_len = item.rz_login.Length;
+                    if (login_len < item.RZLogin.Length)
+                        login_len = item.RZLogin.Length;
                 }
                 for (int i = 0; i <= login_len; i++)
                 {
                     Console.Write(" ");
                 }
                 Console.SetCursorPosition(12, 7);
-                Console.WriteLine(oldInfo[u_ind].rz_login);
+                Console.WriteLine(oldInfo[u_ind].RZLogin);
                 Console.ResetColor();
                 Console.SetCursorPosition(12, 7);
                 var cki = Console.ReadKey();
                 //                Console.WriteLine(cki.Key);
+
                 if (cki.Key == ConsoleKey.Escape)
                 {
-                    RZMenyu(ref oldInfo);
+//                    RZMenyu(ref oldInfo);
                 }
                 if (cki.Key == ConsoleKey.DownArrow)
                 {
                     u_ind += 1;
-                    if (u_ind >= oldInfo.Length)
+                    if (u_ind >= oldInfo.Count)
                     {
-                        u_ind = oldInfo.Length - 1;
+                        u_ind = oldInfo.Count - 1;
                     }
                 }
                 if (cki.Key == ConsoleKey.UpArrow)
@@ -200,7 +190,7 @@ namespace RZToDoListApp
                     temp_password = Console.ReadLine();
                     Console.ResetColor();
 
-                    if (temp_password == oldInfo[u_ind].rz_password)
+                    if (temp_password == oldInfo[u_ind].RZPassword)
                     {
                         Console.SetCursorPosition(20, 0);
                         for (int i = 0; i < password_len; i++)
@@ -212,7 +202,7 @@ namespace RZToDoListApp
                         Console.SetCursorPosition(1, 9);
                         Console.WriteLine("Correct Password");
                         Console.SetCursorPosition(50, 0);
-                        Console.WriteLine($"Welcome, { oldInfo[u_ind].rz_name }");
+                        Console.WriteLine($"Welcome, { oldInfo[u_ind].RZName }");
                     }
                     else
                     {
@@ -231,7 +221,7 @@ namespace RZToDoListApp
                 if (cki.Key == ConsoleKey.F1)
                 {
                     Console.SetCursorPosition(20, 0);
-                    Console.WriteLine(oldInfo[u_ind].rz_password);
+                    Console.WriteLine(oldInfo[u_ind].RZPassword);
                 }
             } while (true);
 

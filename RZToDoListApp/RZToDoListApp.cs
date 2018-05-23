@@ -13,7 +13,7 @@ namespace RZToDoListApp
             List<RZAccount> RZAccountsList;
             RZAccountsList = new List<RZAccount>();
 
-            RZAccountsList.Add();
+//            RZAccountsList.Add();
         }
     }
 }

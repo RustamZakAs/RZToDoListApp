@@ -11,6 +11,5 @@ namespace RZToDoListApp
         public bool RZDone { get; set; }
         public DateTime RZDateCreate { get; set; }
         public DateTime RZDateClose { get; set; }
-
     }
 }
