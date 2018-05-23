@@ -11,6 +11,7 @@ namespace RZToDoListApp
 {
     class RZMain
     {
+        public static string ThisUser { get; set; }
         static void Main(string[] args)
         {
             List<RZAccount> RZAccountsList;

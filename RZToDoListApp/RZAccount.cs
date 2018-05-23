@@ -204,6 +204,7 @@ namespace RZToDoListApp
                         Console.WriteLine("Correct Password");
                         Console.SetCursorPosition(50, 0);
                         Console.WriteLine($"Welcome, { RZAccountsList[u_ind].RZName }");
+                        RZMain.ThisUser = RZAccountsList[u_ind].RZName;
                     }
                     else
                     {
