@@ -57,7 +57,7 @@ namespace RZToDoListApp
             } while (i < text.Length);
         }
 
-        public static void RZSignUp(ref List<RZAccount> oldInfo)
+        public static void RZSignUp(ref List<RZAccount> RZAccountsList)
         {
             Console.SetWindowSize(35, 19);
             Console.SetBufferSize(35, 19);
@@ -108,8 +108,8 @@ namespace RZToDoListApp
                         info.RZLogin += "_";
                     info.RZLogin += info.RZAge.ToString();
                 }
-//                info.RZPassword = RandomString(password_len);
-                info.RZPassword = Console.ReadLine();
+                info.RZPassword = RandomString(password_len);
+                //info.RZPassword = Console.ReadLine();
 
                 Console.WriteLine($"User Login:    {info.RZLogin}");
                 Console.WriteLine($"User Password: {info.RZPassword}");
@@ -118,9 +118,9 @@ namespace RZToDoListApp
 
             } while (info.RZLogin.Length == 0);
             //            RZWriteBin(ref info);
-            oldInfo.Add(info);
+            RZAccountsList.Add(info);
         }
-        public static void RZLogIn(ref List<RZAccount> oldInfo)
+        public static void RZLogIn(ref List<RZAccount> RZAccountsList)
         {
             Console.SetBufferSize(75, 20);
             Console.SetWindowSize(75, 20);
@@ -130,14 +130,14 @@ namespace RZToDoListApp
             Console.SetCursorPosition(1, 6);
             Console.WriteLine("Press Up or Down Key");
             Console.SetCursorPosition(1, 7);
-            Console.Write($"User Name: {oldInfo[u_ind].RZLogin}");
+            Console.Write($"User Name: {RZAccountsList[u_ind].RZLogin}");
             do
             {
                 Console.SetCursorPosition(12, 7);
                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                 Console.ForegroundColor = ConsoleColor.White;
                 int login_len = 0;
-                foreach (var item in oldInfo)
+                foreach (var item in RZAccountsList)
                 {
                     if (login_len < item.RZLogin.Length)
                         login_len = item.RZLogin.Length;
@@ -147,7 +147,7 @@ namespace RZToDoListApp
                     Console.Write(" ");
                 }
                 Console.SetCursorPosition(12, 7);
-                Console.WriteLine(oldInfo[u_ind].RZLogin);
+                Console.WriteLine(RZAccountsList[u_ind].RZLogin);
                 Console.ResetColor();
                 Console.SetCursorPosition(12, 7);
                 var cki = Console.ReadKey();
@@ -160,9 +160,9 @@ namespace RZToDoListApp
                 if (cki.Key == ConsoleKey.DownArrow)
                 {
                     u_ind += 1;
-                    if (u_ind >= oldInfo.Count)
+                    if (u_ind >= RZAccountsList.Count)
                     {
-                        u_ind = oldInfo.Count - 1;
+                        u_ind = RZAccountsList.Count - 1;
                     }
                 }
                 if (cki.Key == ConsoleKey.UpArrow)
@@ -191,7 +191,7 @@ namespace RZToDoListApp
                     temp_password = Console.ReadLine();
                     Console.ResetColor();
 
-                    if (temp_password == oldInfo[u_ind].RZPassword)
+                    if (temp_password == RZAccountsList[u_ind].RZPassword)
                     {
                         Console.SetCursorPosition(20, 0);
                         for (int i = 0; i < password_len; i++)
@@ -203,7 +203,7 @@ namespace RZToDoListApp
                         Console.SetCursorPosition(1, 9);
                         Console.WriteLine("Correct Password");
                         Console.SetCursorPosition(50, 0);
-                        Console.WriteLine($"Welcome, { oldInfo[u_ind].RZName }");
+                        Console.WriteLine($"Welcome, { RZAccountsList[u_ind].RZName }");
                     }
                     else
                     {
@@ -222,10 +222,19 @@ namespace RZToDoListApp
                 if (cki.Key == ConsoleKey.F1)
                 {
                     Console.SetCursorPosition(20, 0);
-                    Console.WriteLine(oldInfo[u_ind].RZPassword);
+                    Console.WriteLine(RZAccountsList[u_ind].RZPassword);
                 }
             } while (true);
 
+        }
+        private static string RandomString(int length)
+        {
+            var random = new Random();
+            const string chars = //"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                                 //"abcdefghijklmnopqrstuvwxyz" +
+                                 "0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
