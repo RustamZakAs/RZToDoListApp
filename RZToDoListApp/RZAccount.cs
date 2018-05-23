@@ -4,15 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace RZToDoListApp
 {
+    [DataContract]
     class RZAccount
     {
+        [DataMember]
         public string RZName { get; set; }
+        [DataMember]
         public string RZSurname { get; set; }
+        [DataMember]
         public int RZAge { get; set; }
+        [DataMember]
         public string RZLogin { get; set; }
+        [DataMember]
         public string RZPassword { get; set; }
 
         public static int userCount = 0;
@@ -56,6 +64,7 @@ namespace RZToDoListApp
             RZAccount info = new RZAccount();
             do
             {
+                Console.WriteLine("Create a new user:");
                 Console.WriteLine(userCount);
                 do
                 {
@@ -73,7 +82,7 @@ namespace RZToDoListApp
                 {
                     Console.SetCursorPosition(2, 8);
                     Console.Write("Age:     ");
-//                    info.RZAge = int.TryParse(Console.ReadLine(), out info.RZAge);
+                    info.RZAge = int.Parse(Console.ReadLine());
                 } while (info.RZAge == 0);
 
                 Console.WriteLine($"Name:    {info.RZName}");
@@ -99,10 +108,8 @@ namespace RZToDoListApp
                         info.RZLogin += "_";
                     info.RZLogin += info.RZAge.ToString();
                 }
-
 //                info.RZPassword = RandomString(password_len);
                 info.RZPassword = Console.ReadLine();
-
 
                 Console.WriteLine($"User Login:    {info.RZLogin}");
                 Console.WriteLine($"User Password: {info.RZPassword}");
@@ -115,12 +122,6 @@ namespace RZToDoListApp
         }
         public static void RZLogIn(ref List<RZAccount> oldInfo)
         {
-            if (oldInfo.Count == 0)
-            {
-                Console.WriteLine("Users is not exist!");
-                Console.ReadKey();
-                return;
-            }
             Console.SetBufferSize(75, 20);
             Console.SetWindowSize(75, 20);
 
@@ -150,11 +151,11 @@ namespace RZToDoListApp
                 Console.ResetColor();
                 Console.SetCursorPosition(12, 7);
                 var cki = Console.ReadKey();
-                //                Console.WriteLine(cki.Key);
+                //Console.WriteLine(cki.Key);
 
                 if (cki.Key == ConsoleKey.Escape)
                 {
-//                    RZMenyu(ref oldInfo);
+                    //RZMenyu(ref oldInfo);
                 }
                 if (cki.Key == ConsoleKey.DownArrow)
                 {
