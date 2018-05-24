@@ -110,15 +110,32 @@ namespace RZToDoListApp
                 }
                 info.RZPassword = RandomString(password_len);
                 //info.RZPassword = Console.ReadLine();
-
                 Console.WriteLine($"User Login:    {info.RZLogin}");
                 Console.WriteLine($"User Password: {info.RZPassword}");
 
                 Console.ReadKey();
-
             } while (info.RZLogin.Length == 0);
-            //            RZWriteBin(ref info);
+            //RZWriteBin(ref info);
             RZAccountsList.Add(info);
+            //---------------------------------
+            DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(List<RZAccount>));
+            using (FileStream fs = new FileStream("people.json", FileMode.OpenOrCreate))
+            {
+                jsonFormatter.WriteObject(fs, RZAccountsList);
+            }
+
+            using (FileStream fs = new FileStream("people.json", FileMode.OpenOrCreate))
+            {
+                List<RZAccount> newpeople = (List<RZAccount>)jsonFormatter.ReadObject(fs);
+
+                foreach (RZAccount p in newpeople)
+                {
+                    Console.WriteLine("Имя: {0} --- Фамилия: {1} --- Возраст: {2}", p.RZName, p.RZSurname, p.RZAge);
+                }
+            }
+            Console.ReadLine();
+            //***************************************
+
         }
         public static void RZLogIn(ref List<RZAccount> RZAccountsList)
         {
@@ -155,7 +172,7 @@ namespace RZToDoListApp
 
                 if (cki.Key == ConsoleKey.Escape)
                 {
-                    //RZMenyu(ref oldInfo);
+                    RZMain.RZMainMenyu(ref RZAccountsList);
                 }
                 if (cki.Key == ConsoleKey.DownArrow)
                 {
