@@ -119,12 +119,12 @@ namespace RZToDoListApp
             RZAccountsList.Add(info);
             //---------------------------------
             DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(List<RZAccount>));
-            using (FileStream fs = new FileStream("people.json", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream("Users.json", FileMode.OpenOrCreate))
             {
                 jsonFormatter.WriteObject(fs, RZAccountsList);
             }
 
-            using (FileStream fs = new FileStream("people.json", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream("Users.json", FileMode.OpenOrCreate))
             {
                 List<RZAccount> newpeople = (List<RZAccount>)jsonFormatter.ReadObject(fs);
 
