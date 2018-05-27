@@ -64,8 +64,7 @@ namespace RZToDoListApp
             RZAccount info = new RZAccount();
             do
             {
-                Console.WriteLine("Create a new user:");
-                Console.WriteLine(userCount);
+                Console.WriteLine($"Create a new user with new id: {RZAccountsList.Count}");
                 do
                 {
                     Console.SetCursorPosition(2, 6);
@@ -82,7 +81,8 @@ namespace RZToDoListApp
                 {
                     Console.SetCursorPosition(2, 8);
                     Console.Write("Age:     ");
-                    info.RZAge = int.Parse(Console.ReadLine());
+                    int.TryParse(Console.ReadLine(), out int tempint);
+                    info.RZAge = tempint;
                 } while (info.RZAge == 0);
 
                 Console.WriteLine($"Name:    {info.RZName}");
@@ -110,6 +110,13 @@ namespace RZToDoListApp
                 }
                 info.RZPassword = RandomString(password_len);
                 //info.RZPassword = Console.ReadLine();
+                for (int i = 0; i < RZAccountsList.Count; i++)
+                {
+                    if (info.RZLogin == RZAccountsList[i].RZLogin)
+                    {
+                        info.RZLogin += "c";
+                    }
+                }
                 Console.WriteLine($"User Login:    {info.RZLogin}");
                 Console.WriteLine($"User Password: {info.RZPassword}");
 
@@ -118,24 +125,9 @@ namespace RZToDoListApp
             //RZWriteBin(ref info);
             RZAccountsList.Add(info);
             //---------------------------------
-            DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(List<RZAccount>));
-            using (FileStream fs = new FileStream("Users.json", FileMode.OpenOrCreate))
-            {
-                jsonFormatter.WriteObject(fs, RZAccountsList);
-            }
-
-            using (FileStream fs = new FileStream("Users.json", FileMode.OpenOrCreate))
-            {
-                List<RZAccount> newpeople = (List<RZAccount>)jsonFormatter.ReadObject(fs);
-
-                foreach (RZAccount p in newpeople)
-                {
-                    Console.WriteLine("Имя: {0} --- Фамилия: {1} --- Возраст: {2}", p.RZName, p.RZSurname, p.RZAge);
-                }
-            }
-            Console.ReadLine();
+            RZJson RZSaveJson = new RZJson();
+            RZSaveJson.Save(RZAccountsList,"Users");
             //***************************************
-
         }
         public static void RZLogIn(ref List<RZAccount> RZAccountsList)
         {
@@ -220,8 +212,10 @@ namespace RZToDoListApp
                         Console.SetCursorPosition(1, 9);
                         Console.WriteLine("Correct Password");
                         Console.SetCursorPosition(50, 0);
-                        Console.WriteLine($"Welcome, { RZAccountsList[u_ind].RZName }");
-                        RZMain.ThisUser = RZAccountsList[u_ind].RZName;
+                        RZMain.ThisUser = RZAccountsList[u_ind].RZLogin;
+                        Console.WriteLine($"Welcome, { RZMain.ThisUser }");
+
+                        RZMain.RZMainMenyu(ref RZAccountsList);
                     }
                     else
                     {

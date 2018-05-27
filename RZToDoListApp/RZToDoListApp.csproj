@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RZSaveLoad.cs" />
     <Compile Include="RZTasks.cs" />
     <Compile Include="RZAccount.cs" />
     <Compile Include="RZToDoListApp.cs" />
