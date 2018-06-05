@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -17,6 +18,7 @@ namespace RZToDoListApp
         public static List<RZTasks> RZTasksList;
         static void Main(string[] args)
         {
+            ThisUser = "";
             RZJson RZSaveJson = new RZJson();
             RZAccountsList = (List<RZAccount>)RZSaveJson.Load("Users",1);
             RZTasksList = (List<RZTasks>)RZSaveJson.Load("Tasks",2);
@@ -24,7 +26,7 @@ namespace RZToDoListApp
         }
         public static void RZMainMenyu (ref List<RZAccount> RZAccountsList)
         {
-            if (/*ThisUser.Length > 0 ||*/ ThisUser != null) RZMainMenyuUser(ref RZAccountsList);
+            if (ThisUser.Length != 0) RZMainMenyuUser(ref RZAccountsList);
             else
             {
                 Console.SetWindowSize(20, 11);
@@ -108,27 +110,38 @@ namespace RZToDoListApp
                 } while (true);
             }
         }
+        public static void ShowWelcome ()
+        {
+            Console.SetCursorPosition(23, 0);
+            foreach (var item in RZAccountsList)
+            {
+                if (item.RZLogin == ThisUser)
+                {
+                    Console.WriteLine($"Welcome, { item.RZName } {item.RZSurname}");
+                    break;
+                }
+            }
+        }
         public static void RZMainMenyuUser(ref List<RZAccount> RZAccountsList)
         {
-            Console.SetBufferSize(75, 20);
+            Console.SetBufferSize(75, 120);
             Console.SetWindowSize(75, 20);
-
-            Console.SetCursorPosition(50, 0);
-            Console.WriteLine($"Welcome, { ThisUser }");
+            ShowWelcome();
 
             int m_ind = 0;
             int m_count = 5;
             var m_list = new string[m_count];
-            m_list[0] = "  Add task    ";
-            m_list[1] = "  My tasks     ";
-            m_list[2] = "  Parameters  ";
-            m_list[3] = "  Log out     ";
-            m_list[4] = "  Exit        ";
+            m_list[0] = "  Add task        ";
+            m_list[1] = "  My tasks        ";
+            m_list[2] = "  Parameters      ";
+            m_list[3] = "  Log out         ";
+            m_list[4] = "  Exit            ";
 
             ConsoleKeyInfo cki;
             do
             {
                 Console.Clear();
+                ShowWelcome();
                 for (short i = 0; i < m_list.Length; i++)
                 {
                     if (m_ind == i)
@@ -167,17 +180,14 @@ namespace RZToDoListApp
                             RZTasks.RZAddTask(ref RZTasksList);
                             break;
                         case 1: //m_list[1] = "  My tasks     ";
-                            foreach (var item in RZTasksList)
-                            {
-                                Console.WriteLine(item.ToString());
-                            }
-                            Console.ReadKey();
+                            RZMyTasks();
                             break;
                         case 2: //m_list[2] = "  Parameters  ";
                             RZParameters(ref RZAccountsList);
                             break;
                         case 3: //m_list[3] = "  Log out     ";
-
+                            ThisUser = "";
+                            RZMainMenyu(ref RZAccountsList);
                             break;
                         case 4: //m_list[4] = "  Exit        ";
                             System.Environment.Exit(1);
@@ -185,6 +195,61 @@ namespace RZToDoListApp
                     }
                 }
             } while (true);
+        }
+        public static void RZMyTasks ()
+        {
+            ConsoleKeyInfo cki;
+            List<int> indexs = new List<int>() {};
+            for (int i = 0; i < RZTasksList.Count; i++)
+            {
+                if (RZTasksList[i].RZTUser == ThisUser)
+                {
+                    indexs.Add(i);
+                }
+            }
+
+            int m_ind = 0;
+            int m_count = 3;
+            var m_list = new string[m_count];
+            m_list[0] = "  Note completed  ";
+            m_list[1] = "  Change task     ";
+            m_list[2] = "  Delete task     ";
+
+            int nowIndex = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine($"Найдено записей: {indexs.Count}");
+                ShowWelcome();
+                Console.WriteLine(RZTasksList[indexs[nowIndex]].ToString());
+                cki = Console.ReadKey();
+                if (cki.Key == ConsoleKey.DownArrow)
+                {
+                    nowIndex += 1;
+                    if (nowIndex >= indexs.Count)
+                    {
+                        nowIndex = indexs.Count - 1;
+                    }
+                }
+                if (cki.Key == ConsoleKey.UpArrow)
+                {
+                    nowIndex -= 1;
+                    if (nowIndex <= 0)
+                    {
+                        nowIndex = 0;
+                    }
+                }
+                if (cki.Key == ConsoleKey.Enter)
+                {
+                    do
+                    {
+
+                        break;
+
+                    } while (true);
+                }
+            } while (cki.Key != ConsoleKey.Escape);
+            RZMainMenyuUser(ref RZAccountsList);
         }
         private static void RZParameters (ref List<RZAccount> RZAccountsList)
         {

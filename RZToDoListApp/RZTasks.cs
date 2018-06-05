@@ -17,6 +17,8 @@ namespace RZToDoListApp
         [DataMember]
         public bool RZTDone { get; set; }
         [DataMember]
+        public string RZTPriority { get; set; }
+        [DataMember]
         private DateTime rzTDateCreate;
         public DateTime RZTDateCreate
         {
@@ -42,7 +44,10 @@ namespace RZToDoListApp
             tempTask.RZTTitle = Console.ReadLine();
 
             Console.Write("Choose Done task: ");
-            tempTask.RZTDone = RZDoneParamChange(17, 7);
+            tempTask.RZTDone = RZDoneParamChange(17, 8);
+
+            Console.Write("Choose Priority task: ");
+            tempTask.RZTPriority = RZPriorityParamChange(21, 9);
 
             tempTask.RZTDateCreate = DateTime.Now;
 
@@ -100,13 +105,63 @@ namespace RZToDoListApp
                             return false;
                     }
                 }
-               
+            } while (true);
+        }
+
+        public static string RZPriorityParamChange(int left, int top)
+        {
+            ConsoleKeyInfo cki;
+            int m_ind = 1;
+            int m_count = 3;
+            var m_list = new string[m_count];
+            m_list[0] = "  High  ";
+            m_list[1] = " Normal ";
+            m_list[2] = "  Low   ";
+
+            Console.SetCursorPosition(left, top);
+            Console.WriteLine(m_list[0]);
+            do
+            {
+                Console.SetCursorPosition(left, top);
+                Console.WriteLine(m_list[m_ind]);
+
+                cki = Console.ReadKey();
+                if (cki.Key == ConsoleKey.DownArrow)
+                {
+                    m_ind += 1;
+                    if (m_ind >= m_count)
+                    {
+                        m_ind = m_count - 1;
+                    }
+                }
+                if (cki.Key == ConsoleKey.UpArrow)
+                {
+                    m_ind -= 1;
+                    if (m_ind <= 0)
+                    {
+                        m_ind = 0;
+                    }
+                }
+                if (cki.Key == ConsoleKey.Enter)
+                {
+                    switch (m_ind)
+                    {
+                        case 0:
+                            return "High";
+                        case 1:
+                            return "Normal";
+                        case 2:
+                            return "Low";
+                    }
+                }
             } while (true);
         }
 
         public override string ToString()
         {
-            return $"{rzTUser} - {RZTDateCreate} - {RZTDone} - {RZTTitle} - {RZTDateEnd}";
+            return $"\n{rzTUser}\n{RZTDateCreate} - {(RZTDone ? "Active" : "Not Active" )} - {RZTPriority} - {RZTDateEnd}\n" +
+                   $"---------------------------------------------------------\n{RZTTitle}\n" +
+                   $"---------------------------------------------------------";
         }
     }
 }
