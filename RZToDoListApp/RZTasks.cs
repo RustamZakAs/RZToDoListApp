@@ -43,24 +43,27 @@ namespace RZToDoListApp
             Console.Write("Insert Title: ");
             tempTask.RZTTitle = Console.ReadLine();
 
+            int leftx = Console.CursorLeft, topx = Console.CursorTop;
+
+            Console.SetCursorPosition(leftx, topx);
             Console.Write("Choose Done task: ");
-            tempTask.RZTDone = RZDoneParamChange(17, 8);
+            tempTask.RZTDone = RZDoneParamChange(17, topx);
 
             Console.Write("Choose Priority task: ");
-            tempTask.RZTPriority = RZPriorityParamChange(21, 9);
+            tempTask.RZTPriority = RZPriorityParamChange(21, topx + 1);
 
             tempTask.RZTDateCreate = DateTime.Now;
 
             Console.Write("Insert how much day active: ");
             double.TryParse(Console.ReadLine(), out double tempint);
             tempTask.RZTDateEnd = DateTime.Now;
-            tempTask.RZTDateEnd = tempTask.RZTDateEnd.AddDays(tempint);
+            tempTask.RZTDateEnd = tempTask.RZTDateEnd.AddDays(tempint == 0 ? 1 : tempint);
 
             tempTask.RZTUser = RZMain.ThisUser;
 
             RZTasksList.Add(tempTask);
-            RZJson RZSaveJson = new RZJson();
-            RZSaveJson.Save(RZTasksList, "Tasks");
+            RZJson RZJsonx = new RZJson();
+            RZJsonx.Save(RZTasksList, "Tasks");
         }
 
         public static bool RZDoneParamChange(int left, int top)

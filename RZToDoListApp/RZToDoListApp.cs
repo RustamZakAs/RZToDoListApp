@@ -18,10 +18,11 @@ namespace RZToDoListApp
         public static List<RZTasks> RZTasksList;
         static void Main(string[] args)
         {
+            Console.Title = "To Do List";
             ThisUser = "";
-            RZJson RZSaveJson = new RZJson();
-            RZAccountsList = (List<RZAccount>)RZSaveJson.Load("Users",1);
-            RZTasksList = (List<RZTasks>)RZSaveJson.Load("Tasks",2);
+            RZJson RZJsonx = new RZJson();
+            RZAccountsList = (List<RZAccount>)RZJsonx.Load("Users",1);
+            RZTasksList = (List<RZTasks>)RZJsonx.Load("Tasks",2);
             RZMainMenyu(ref RZAccountsList);
         }
         public static void RZMainMenyu (ref List<RZAccount> RZAccountsList)
@@ -180,7 +181,7 @@ namespace RZToDoListApp
                             RZTasks.RZAddTask(ref RZTasksList);
                             break;
                         case 1: //m_list[1] = "  My tasks     ";
-                            RZMyTasks();
+                            RZMyTasks(ref RZTasksList);
                             break;
                         case 2: //m_list[2] = "  Parameters  ";
                             RZParameters(ref RZAccountsList);
@@ -196,7 +197,7 @@ namespace RZToDoListApp
                 }
             } while (true);
         }
-        public static void RZMyTasks ()
+        public static void RZMyTasks (ref List<RZTasks> RZTasksList)
         {
             ConsoleKeyInfo cki;
             List<int> indexs = new List<int>() {};
@@ -221,111 +222,124 @@ namespace RZToDoListApp
                 Console.Clear();
                 Console.WriteLine($"Найдено записей: {indexs.Count}");
                 ShowWelcome();
-                Console.WriteLine($"Запись номер: {nowIndex+1}");
+                if(indexs.Count > 0) Console.WriteLine($"Запись номер: {nowIndex+1}");
                 if (indexs.Count != 0) Console.WriteLine(RZTasksList[indexs[nowIndex]].ToString());
                 else
                 {
                     Console.ReadKey();
                     break;
                 }
-
                 cki = Console.ReadKey();
-                if (cki.Key == ConsoleKey.DownArrow)
-                {
-                    nowIndex += 1;
-                    if (nowIndex >= indexs.Count)
-                    {
-                        nowIndex = indexs.Count - 1;
-                    }
-                }
-                if (cki.Key == ConsoleKey.UpArrow)
-                {
-                    nowIndex -= 1;
-                    if (nowIndex <= 0)
-                    {
-                        nowIndex = 0;
-                    }
-                }
-                if (cki.Key == ConsoleKey.Enter)
-                {
-                    int leftx = Console.CursorLeft;
-                    int topx  = Console.CursorTop;
-                    do
-                    {
-                        Console.SetCursorPosition(leftx,topx);
-                        if (m_ind == 0)
-                        {
-                            SetColorBlue();
-                            Console.Write($" {m_list[0]} ");
-                            Console.ResetColor();
-                            Console.Write($" {m_list[1]} ");
-                            Console.Write($" {m_list[2]} ");
 
-                        }
-                        else if (m_ind == 1)
+                if(indexs.Count > 0)
+                {
+                    if (cki.Key == ConsoleKey.DownArrow)
+                    {
+                        nowIndex += 1;
+                        if (nowIndex >= indexs.Count)
                         {
-                            Console.Write($" {m_list[0]} ");
-                            SetColorBlue();
-                            Console.Write($" {m_list[1]} ");
-                            Console.ResetColor();
-                            Console.Write($" {m_list[2]} ");
+                            nowIndex = indexs.Count - 1;
                         }
-                        else if (m_ind == 2)
+                    }
+                    if (cki.Key == ConsoleKey.UpArrow)
+                    {
+                        nowIndex -= 1;
+                        if (nowIndex <= 0)
                         {
-                            Console.Write($" {m_list[0]} ");
-                            Console.Write($" {m_list[1]} ");
-                            SetColorBlue();
-                            Console.Write($" {m_list[2]} ");
-                            Console.ResetColor();
+                            nowIndex = 0;
                         }
-                        cki = Console.ReadKey();
-                        if (cki.Key == ConsoleKey.DownArrow || cki.Key == ConsoleKey.RightArrow)
+                    }
+                    if (cki.Key == ConsoleKey.Enter)
+                    {
+                        int leftx = Console.CursorLeft;
+                        int topx  = Console.CursorTop;
+                        do
                         {
-                            m_ind += 1;
-                            if (m_ind >= m_count)
+                            Console.SetCursorPosition(leftx,topx);
+                            if (m_ind == 0)
                             {
-                                m_ind = m_count - 1;
+                                SetColorBlue();
+                                Console.Write($" {m_list[0]} ");
+                                Console.ResetColor();
+                                Console.Write($" {m_list[1]} ");
+                                Console.Write($" {m_list[2]} ");
+
                             }
-                        }
-                        if (cki.Key == ConsoleKey.UpArrow || cki.Key == ConsoleKey.LeftArrow)
-                        {
-                            m_ind -= 1;
-                            if (m_ind <= 0)
+                            else if (m_ind == 1)
                             {
-                                m_ind = 0;
+                                Console.Write($" {m_list[0]} ");
+                                SetColorBlue();
+                                Console.Write($" {m_list[1]} ");
+                                Console.ResetColor();
+                                Console.Write($" {m_list[2]} ");
                             }
-                        }
-                        if (cki.Key == ConsoleKey.Enter)
-                        {
-                            Console.SetCursorPosition(leftx, topx + 1);
-                            switch (m_ind)
+                            else if (m_ind == 2)
                             {
-                                case 0:
-                                    {
-                                        Console.WriteLine($" *{m_list[0]} ");
-                                        RZTasksList[indexs[nowIndex]].RZTDone = false;
-                                    }
-                                    break;
-                                case 1:
-                                    {
-                                        Console.WriteLine($" **{m_list[1]} ");
-                                    }
-                                    break;
-                                case 2:
-                                    {
-                                        Console.WriteLine($" ***{m_list[2]} ");
-                                    }
-                                    break;
-                                default:
-                                    break;
+                                Console.Write($" {m_list[0]} ");
+                                Console.Write($" {m_list[1]} ");
+                                SetColorBlue();
+                                Console.Write($" {m_list[2]} ");
+                                Console.ResetColor();
                             }
-                        }
-                        if (cki.Key == ConsoleKey.Escape)
-                        {
-                            RZMyTasks();
-                        }
-                    } while (true);
-                }
+                            cki = Console.ReadKey();
+                            if (cki.Key == ConsoleKey.DownArrow || cki.Key == ConsoleKey.RightArrow)
+                            {
+                                m_ind += 1;
+                                if (m_ind >= m_count)
+                                {
+                                    m_ind = m_count - 1;
+                                }
+                            }
+                            if (cki.Key == ConsoleKey.UpArrow || cki.Key == ConsoleKey.LeftArrow)
+                            {
+                                m_ind -= 1;
+                                if (m_ind <= 0)
+                                {
+                                    m_ind = 0;
+                                }
+                            }
+                            if (cki.Key == ConsoleKey.Enter)
+                            {
+                                Console.SetCursorPosition(leftx, topx + 1);
+                                switch (m_ind)
+                                {
+                                    case 0:
+                                        {
+                                            Console.WriteLine($" *{m_list[0]} ");
+                                            if (RZTasksList[indexs[nowIndex]].RZTDone == false)
+                                            {
+                                                RZTasksList[indexs[nowIndex]].RZTDone = true;
+                                            }
+                                            else RZTasksList[indexs[nowIndex]].RZTDone = false;
+                                            RZMyTasks(ref RZTasksList);
+                                        }
+                                        break;
+                                    case 1:
+                                        {
+                                            Console.WriteLine($" **{m_list[1]} ");
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            Console.WriteLine($" ***{m_list[2]} ");
+                                            RZTasksList.RemoveAt(indexs[nowIndex]);
+                                            indexs.RemoveAt(nowIndex);
+                                            RZJson RZJsonx = new RZJson();
+                                            RZJsonx.Save(RZTasksList, "Tasks");
+                                            RZMyTasks(ref RZTasksList);
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            if (cki.Key == ConsoleKey.Escape)
+                            {
+                                RZMyTasks(ref RZTasksList);
+                            }
+                        } while (true);
+                    } // if cki.Key == ConsoleKey.Enter
+                } //if indexs.Count > 0
             } while (cki.Key != ConsoleKey.Escape);
             RZMainMenyuUser(ref RZAccountsList);
         }
@@ -386,6 +400,7 @@ namespace RZToDoListApp
                         case 0:
                             RZDatabaseRestore(ref RZAccountsList);
                             Console.ReadKey();
+                            RZMain.Main(new string[] { });
                             break;
                         case 1:
                             RZMainMenyu(ref RZAccountsList);
@@ -400,8 +415,8 @@ namespace RZToDoListApp
             {
                 RZAccountsList.Remove(RZAccountsList[i]);
             }
-            RZJson RZSaveJson = new RZJson();
-            RZSaveJson.Save(RZAccountsList, "Users");
+            RZJson RZJsonx = new RZJson();
+            RZJsonx.Save(RZAccountsList, "Users");
             if (File.Exists(@"Users.json"))
             {
                 File.Delete(@"Users.json");
@@ -413,7 +428,7 @@ namespace RZToDoListApp
             {
                 RZAccountsList.Remove(RZAccountsList[i]);
             }
-            RZSaveJson.Save(RZTasksList, "Tasks");
+            RZJsonx.Save(RZTasksList, "Tasks");
             if (File.Exists(@"Tasks.json"))
             {
                 File.Delete(@"Tasks.json");

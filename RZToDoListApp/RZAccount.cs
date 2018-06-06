@@ -125,8 +125,8 @@ namespace RZToDoListApp
             //RZWriteBin(ref info);
             RZAccountsList.Add(info);
             //---------------------------------
-            RZJson RZSaveJson = new RZJson();
-            RZSaveJson.Save(RZAccountsList,"Users");
+            RZJson RZJsonx = new RZJson();
+            RZJsonx.Save(RZAccountsList,"Users");
             //***************************************
         }
         public static void RZLogIn(ref List<RZAccount> RZAccountsList)

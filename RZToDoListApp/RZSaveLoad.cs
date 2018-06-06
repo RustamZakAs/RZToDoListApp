@@ -21,6 +21,10 @@ namespace RZToDoListApp
     {
         public void Save(object RZData, string filename)
         {
+            /*if (File.Exists($@"{filename}.json"))
+            {
+                File.Delete($@"{filename}.json");
+            }*/
             DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(RZData.GetType()/*typeof(List<RZAccount>)*/);
             using (FileStream fs = new FileStream($"{filename}.json", FileMode.OpenOrCreate))
             {
