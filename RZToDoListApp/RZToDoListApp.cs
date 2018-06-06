@@ -221,7 +221,14 @@ namespace RZToDoListApp
                 Console.Clear();
                 Console.WriteLine($"Найдено записей: {indexs.Count}");
                 ShowWelcome();
-                Console.WriteLine(RZTasksList[indexs[nowIndex]].ToString());
+                Console.WriteLine($"Запись номер: {nowIndex+1}");
+                if (indexs.Count != 0) Console.WriteLine(RZTasksList[indexs[nowIndex]].ToString());
+                else
+                {
+                    Console.ReadKey();
+                    break;
+                }
+
                 cki = Console.ReadKey();
                 if (cki.Key == ConsoleKey.DownArrow)
                 {
@@ -241,11 +248,82 @@ namespace RZToDoListApp
                 }
                 if (cki.Key == ConsoleKey.Enter)
                 {
+                    int leftx = Console.CursorLeft;
+                    int topx  = Console.CursorTop;
                     do
                     {
+                        Console.SetCursorPosition(leftx,topx);
+                        if (m_ind == 0)
+                        {
+                            SetColorBlue();
+                            Console.Write($" {m_list[0]} ");
+                            Console.ResetColor();
+                            Console.Write($" {m_list[1]} ");
+                            Console.Write($" {m_list[2]} ");
 
-                        break;
-
+                        }
+                        else if (m_ind == 1)
+                        {
+                            Console.Write($" {m_list[0]} ");
+                            SetColorBlue();
+                            Console.Write($" {m_list[1]} ");
+                            Console.ResetColor();
+                            Console.Write($" {m_list[2]} ");
+                        }
+                        else if (m_ind == 2)
+                        {
+                            Console.Write($" {m_list[0]} ");
+                            Console.Write($" {m_list[1]} ");
+                            SetColorBlue();
+                            Console.Write($" {m_list[2]} ");
+                            Console.ResetColor();
+                        }
+                        cki = Console.ReadKey();
+                        if (cki.Key == ConsoleKey.DownArrow || cki.Key == ConsoleKey.RightArrow)
+                        {
+                            m_ind += 1;
+                            if (m_ind >= m_count)
+                            {
+                                m_ind = m_count - 1;
+                            }
+                        }
+                        if (cki.Key == ConsoleKey.UpArrow || cki.Key == ConsoleKey.LeftArrow)
+                        {
+                            m_ind -= 1;
+                            if (m_ind <= 0)
+                            {
+                                m_ind = 0;
+                            }
+                        }
+                        if (cki.Key == ConsoleKey.Enter)
+                        {
+                            Console.SetCursorPosition(leftx, topx + 1);
+                            switch (m_ind)
+                            {
+                                case 0:
+                                    {
+                                        Console.WriteLine($" *{m_list[0]} ");
+                                        RZTasksList[indexs[nowIndex]].RZTDone = false;
+                                    }
+                                    break;
+                                case 1:
+                                    {
+                                        Console.WriteLine($" **{m_list[1]} ");
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        Console.WriteLine($" ***{m_list[2]} ");
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (cki.Key == ConsoleKey.Escape)
+                        {
+                            RZMyTasks();
+                        }
                     } while (true);
                 }
             } while (cki.Key != ConsoleKey.Escape);

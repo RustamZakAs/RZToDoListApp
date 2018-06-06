@@ -160,8 +160,8 @@ namespace RZToDoListApp
         public override string ToString()
         {
             return $"\n{rzTUser}\n{RZTDateCreate} - {(RZTDone ? "Active" : "Not Active" )} - {RZTPriority} - {RZTDateEnd}\n" +
-                   $"---------------------------------------------------------\n{RZTTitle}\n" +
-                   $"---------------------------------------------------------";
+                   $"------------------------------------------------------------\n{RZTTitle}\n" +
+                   $"------------------------------------------------------------";
         }
     }
 }
