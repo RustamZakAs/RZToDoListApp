@@ -317,6 +317,11 @@ namespace RZToDoListApp
                                     case 1:
                                         {
                                             Console.WriteLine($" **{m_list[1]} ");
+                                            Console.Write("Insert Title: ");
+                                            RZTasksList[indexs[nowIndex]].RZTTitle = Console.ReadLine();
+                                            RZJson RZJsonx = new RZJson();
+                                            RZJsonx.Save(RZTasksList, "Tasks");
+                                            RZMyTasks(ref RZTasksList);
                                         }
                                         break;
                                     case 2:
