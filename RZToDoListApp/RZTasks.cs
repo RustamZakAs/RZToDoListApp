@@ -56,8 +56,15 @@ namespace RZToDoListApp
 
             Console.Write("Insert how much day active: ");
             double.TryParse(Console.ReadLine(), out double tempint);
-            tempTask.RZTDateEnd = DateTime.Now;
-            tempTask.RZTDateEnd = tempTask.RZTDateEnd.AddDays(tempint == 0 ? 1 : tempint);
+            if (tempint == 0)
+            {
+                tempTask.RZTDateEnd = DateTime.Parse($@"{DateTime.Now.Year.ToString()}/{DateTime.Now.Month.ToString()}/{DateTime.Now.Day.ToString()} 23:59:59");
+            }
+            else
+            {
+                tempTask.RZTDateEnd = DateTime.Now;
+                tempTask.RZTDateEnd = tempTask.RZTDateEnd.AddDays(tempint);
+            }
 
             tempTask.RZTUser = RZMain.ThisUser;
 
